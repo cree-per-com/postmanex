@@ -1,10 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock API Response</title>
 </head>
 <body>
-$END$
+<div id="apiResponse">Loading...</div>
+
+<script>
+    const mockServerUrl = 'https://7eadd3a4-95fc-4734-b4f6-48068137318d.mock.pstmn.io/samples';
+
+    fetch(mockServerUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Network response was not ok, status: ${response.status}`);
+            }
+            return response.text(); // 일단 텍스트로 받아서
+        })
+        .then(data => {
+            try {
+                const jsonData = JSON.parse(data); // JSON으로 파싱 시도
+                document.getElementById('apiResponse').innerHTML = JSON.stringify(jsonData, null, 2);
+            } catch (error) {
+                console.error('Failed to parse JSON:', error);
+                document.getElementById('apiResponse').innerHTML = 'Error parsing JSON data';
+            }
+        })
+        .catch(error => {
+            console.error('Failed to fetch data:', error);
+            document.getElementById('apiResponse').innerHTML = 'Error loading data';
+        });
+</script>
 </body>
 </html>
